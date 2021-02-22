@@ -1,0 +1,19 @@
+{% extends "store/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="album py-5 bg-light">
+    <div class="container">
+        <h5><a href="{% url 'store:plot_search' %}">Wyszukaj ponownie</a></h5><br>
+    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% include "store/plot/plots.html" with plots=plots %}
+    </div>
+</div>
+
+{% if plots %}
+   {% include "pagination.html" with page=plots %}
+{% endif %}
+
+{% endblock %}

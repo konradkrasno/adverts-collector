@@ -35,3 +35,12 @@ class SearchPlotForm(forms.Form):
         self.fields["place"].widget = ListTextWidget(
             data_list=_data_list, name="place-list"
         )
+
+    def clean(self):
+        data = super().clean()
+        for key, val in data.items():
+            if val == "":
+                data[key] = "None"
+            elif val is None:
+                data[key] = 0
+        return data

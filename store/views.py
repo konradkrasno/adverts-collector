@@ -36,8 +36,9 @@ def plot_list(
 
 
 def plot_detail(request, plot_id: int):
+    back_url = request.GET.get("back_url")
     plot = get_object_or_404(Plot, id=plot_id)
-    return render(request, "store/plot/detail.html", {"plot": plot})
+    return render(request, "store/plot/detail.html", {"plot": plot, "back_url": back_url})
 
 
 def saved_plots_list(request):

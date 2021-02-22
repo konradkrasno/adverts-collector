@@ -13,8 +13,9 @@
       <div class="d-flex justify-content-between align-items-center">
         <div class="btn-group">
           <button type="button" class="btn btn-sm btn-outline-secondary">
-            <a class="btn btn-sm" href="{{ plot.get_absolute_url }}">Wyświetl</a>
+            <a class="btn btn-sm" href="{{ plot.get_absolute_url }}?back_url={{ request.get_full_path }}">Wyświetl</a>
           </button>
+          {% if user.is_authenticated %}
             <button type="button" class="btn btn-sm btn-outline-secondary">
               <a class="btn btn-sm" href="#">
                   <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
@@ -25,6 +26,7 @@
                   <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
                 Zapisz</a>
             </button>
+          {% endif %}
         </div>
         <small class="text-muted">{{ plot.date_added }}</small>
       </div>

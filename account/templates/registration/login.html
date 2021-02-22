@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Zaloguj się{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+    <div class="w-25 p-3">
+    <h3>Zaloguj się</h3>
+    {% if form.errors %}
+      <p>
+        Login lub hasło nie pasują.
+        Spróbuj ponownie.
+      </p>
+    {% else %}
+      <p>Wypełnij formularz, aby się zalogować:</p>
+    {% endif %}
+    <div class="login-form">
+      <form action="{% url 'login' %}" method="post">
+        {{ form|crispy }}
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        <br>
+        <button type="submit" class="btn btn-success">Zaloguj</button>
+      </form>
+    </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Panel użytkownika{% endblock %}
+
+{% block content %}
+  <h3>Panel użytkownika</h3>
+  <p>Witaj w panelu użytkownika.</p>
+  <br>
+  <h5><a href="{% url 'store:plot_search' %}">Działki budowlane</a></h5>
+{% endblock %}

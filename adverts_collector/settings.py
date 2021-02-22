@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "account.apps.AccountConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -128,3 +129,8 @@ STATIC_URL = "/static/"
 
 # Scrapy Configuration Options
 SCRAPED_DATA_CATALOG = BASE_DIR.joinpath("scraped_data")
+
+# Account Settings
+LOGIN_REDIRECT_URL = "dashboard"
+LOGIN_URL = "login"
+LOGOUT_URL = "logout"

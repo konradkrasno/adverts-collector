@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Wylogowano{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-center">
+    <h3>Wylogowano</h3>
+  </div>
+  <br>
+  <div class="d-flex justify-content-center">
+    <p>
+      Klinkij, aby <a href="{% url 'login' %}">zalogować się ponownie</a>.
+    </p>
+  </div>
+{% endblock %}

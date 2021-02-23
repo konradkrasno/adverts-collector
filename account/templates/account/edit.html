@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}Edytuj profil{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+  <div class="w-75 p-3">
+    <h3>Edytuj profil</h3>
+    <p>Możesz zmienić swoje dane korzystając z poniższego formularza:</p>
+    <form method="post" enctype="multipart/form-data">
+      {{ user_form|crispy }}
+      {% csrf_token %}
+      <br>
+      <button type="submit" class="btn btn-success">Zapisz zmiany</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

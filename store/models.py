@@ -9,6 +9,7 @@ from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.db import models, transaction
 from django.db.utils import ProgrammingError
 from django.urls import reverse
+from django.conf import settings
 
 
 class PlotManager(models.Manager):
@@ -145,6 +146,6 @@ class SavedAdverts(models.Model):
     """ Creates relationships between the user and its saved adverts.  """
 
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="saved_adverts"
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="saved_adverts"
     )
     plots = models.ManyToManyField(Plot)

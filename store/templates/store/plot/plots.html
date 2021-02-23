@@ -11,20 +11,13 @@
       <h6  class="card-text">{{ plot.price_per_m2 }} PLN/m2</h6>
       <p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">{{ plot.description }}</p>
       <div class="d-flex justify-content-between align-items-center">
-        <div class="btn-group">
+        <div class="btn-group btn-group-sm">
           <button type="button" class="btn btn-sm btn-outline-secondary">
             <a class="btn btn-sm" href="{{ plot.get_absolute_url }}?back_url={{ request.get_full_path }}">Wyświetl</a>
           </button>
           {% if user.is_authenticated %}
             <button type="button" class="btn btn-sm btn-outline-secondary">
-              <a class="btn btn-sm" href="#">
-                  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                Usuń</a>
-            </button>
-            <button type="button" class="btn btn-sm btn-outline-secondary">
-              <a class="btn btn-sm" href="#">
-                  <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
-                Zapisz</a>
+              <a class="btn btn-sm" href="#"><span class="glyphicon glyphicon-star-empty" aria-hidden="true">Zapisz</span></a>
             </button>
           {% endif %}
         </div>
@@ -34,5 +27,5 @@
   </div>
 </div>
 {% empty %}
-    <p>There are no plots for your query.</p>
+    <p>Brak wyników wyszukiwania. Spróbuj wprowadzić inne dane.</p>
 {% endfor %}

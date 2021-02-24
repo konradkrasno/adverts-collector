@@ -2,21 +2,13 @@
 
 {% block title %}Działki budowlane{% endblock %}
 
-{% load crispy_forms_tags %}
-
 {% block content %}
   <div class="row">
     <div class="col">
         <div class="container">
             <div class="d-flex justify-content-center">
                 <div class="container">
-                    <h4>Wyszukaj:</h4>
-                    <form method="get" novalidate>
-                        {{ form|crispy }}
-                        <div class="d-flex justify-content-center">
-                          <button type="submit" class="btn btn-success">Szukaj</button>
-                        </div>
-                    </form>
+                    {% include "store/plot/search_form.html" with form=form %}
                 </div>
             </div>
         </div>
@@ -26,16 +18,21 @@
         {% if place %}
             {% include "store/plot/plots.html" with plots=plots %}
         {% else %}
-            <div class="container">
-              <p>Wprowadź dane i kliknij szukaj, aby wyświetlić wyniki.</p>
+            <div class="container pt-5">
+              <p class="text-center">Wprowadź dane i kliknij szukaj, aby wyświetlić wyniki.</p>
             </div>
         {% endif %}
         </div>
+
+        {% if plots %}
+        <div class="container pt-3">
+          <div class="d-flex justify-content-center">
+              {% include "pagination.html" with page=plots %}
+          </div>
+        </div>
+        {% endif %}
+
     </div>
  </div>
-
-{% if plots %}
-   {% include "pagination.html" with page=plots %}
-{% endif %}
 
 {% endblock %}

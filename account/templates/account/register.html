@@ -7,9 +7,9 @@
 {% block content %}
 <div class="d-flex justify-content-center">
   <div class="w-75 p-3">
-    <h3>Utwórz konto</h3>
-    <p>Zarejestruj się wypełniając poniższy formularz:</p>
-    <form method="post">
+    <h3 class="text-center">Utwórz konto</h3>
+    <p class="text-center">Zarejestruj się wypełniając poniższy formularz:</p>
+    <form class="text-center" method="post">
       {{ user_form|crispy }}
       {% csrf_token %}
       <br>

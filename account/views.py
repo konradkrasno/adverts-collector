@@ -4,11 +4,6 @@ from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm, UserEditForm
 
 
-def index(request):
-    return render(request, "account/index.html")
-
-
-@login_required
 def dashboard(request):
     return render(request, "account/dashboard.html")
 

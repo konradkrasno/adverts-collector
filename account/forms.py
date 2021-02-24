@@ -4,8 +4,8 @@ from .models import User
 
 
 class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(label="Password", widget=forms.PasswordInput)
-    password2 = forms.CharField(label="Repeat Password", widget=forms.PasswordInput)
+    password = forms.CharField(label="Hasło", widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Powtórz hasło", widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -19,6 +19,8 @@ class UserRegistrationForm(forms.ModelForm):
 
 
 class UserEditForm(forms.ModelForm):
+    date_of_birth = forms.DateField(label="Data urodzin", required=False)
+
     class Meta:
         model = User
-        fields = ("first_name", "last_name", "email", "date_of_birth")
+        fields = ("first_name", "last_name", "email")

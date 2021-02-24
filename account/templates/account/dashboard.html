@@ -3,8 +3,52 @@
 {% block title %}Panel użytkownika{% endblock %}
 
 {% block content %}
-  <h3>Panel użytkownika</h3>
-  <p>Witaj w panelu użytkownika.</p>
-  <br>
-  <h5><a href="{% url 'store:plot_search' %}">Działki budowlane</a></h5>
+  {% if user.is_authenticated %}
+  <h3 class="text-center">Panel użytkownika</h3>
+  <p class="text-center">Witaj w panelu użytkownika.</p>
+  {% else %}
+  <p class="text-center"><a href="{% url 'login' %}">Zaloguj się</a> aby uzyskać więcej opcji.<br>
+  Pierwszy raz na  naszym portalu? <a href="{% url 'register' %}">Klinkij</a> aby się zarejestrować.</p>
+  {% endif %}
+
+  <div class="row pt-3">
+    <div class="col">
+      <h5>Przeglądaj ogłoszenia:</h5>
+      <lu>
+        <li><a href="{% url 'store:plot_search' %}">Działki budowlane</a></li>
+      </lu>
+
+    </div>
+    <div class="col-9">
+      {% if user.is_authenticated %}
+        <div class="container">
+          <h5>Ostatnio oglądane ogłoszenia:</h5>
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+          {% if place %}
+              {% include "store/plot/plots.html" with plots=plots %}
+          {% endif %}
+          </div>
+        </div>
+        <div class="container pt-5">
+          <h5>Polecane ogłoszenia:</h5>
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+          {% if place %}
+              {% include "store/plot/plots.html" with plots=plots %}
+          {% endif %}
+          </div>
+        </div>
+      {% else %}
+        <div class="container">
+          <h5>Ostatnio dodane ogłoszenia:</h5>
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+          {% if place %}
+              {% include "store/plot/plots.html" with plots=plots %}
+          {% endif %}
+          </div>
+        </div>
+      {% endif %}
+
+    </div>
+ </div>
+
 {% endblock %}

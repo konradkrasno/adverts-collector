@@ -7,17 +7,17 @@
 {% block content %}
 <div class="d-flex justify-content-center">
     <div class="w-25 p-3">
-    <h3>Zaloguj się</h3>
+    <h3 class="text-center">Zaloguj się</h3>
     {% if form.errors %}
-      <p>
+      <p class="text-center">
         Login lub hasło nie pasują.
         Spróbuj ponownie.
       </p>
     {% else %}
-      <p>Wypełnij formularz, aby się zalogować:</p>
+      <p class="text-center">Wypełnij formularz, aby się zalogować:</p>
     {% endif %}
     <div class="login-form">
-      <form action="{% url 'login' %}" method="post">
+      <form class="text-center" action="{% url 'login' %}" method="post">
         {{ form|crispy }}
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}" />
@@ -25,7 +25,7 @@
         <button type="submit" class="btn btn-success">Zaloguj</button>
       </form>
       <br>
-      <p><a href="{% url 'password_reset' %}">Zapomniałaś/eś hasła?</a><p>
+      <p class="text-center"><a href="{% url 'password_reset' %}">Zapomniałaś/eś hasła?</a><p>
     </div>
     </div>
 </div>

@@ -35,7 +35,7 @@ def plot_search(request):
         plots = paginate(object_list, page, 6)
     return render(
         request,
-        "store/plot/search.html",
+        "adverts/plot/search.html",
         {
             "form": form,
             "place": place,
@@ -50,9 +50,7 @@ def plot_search(request):
 
 def plot_detail(request, plot_id: int):
     plot = get_object_or_404(Plot, id=plot_id)
-    return render(
-        request, "store/plot/detail.html", {"plot": plot}
-    )
+    return render(request, "adverts/plot/detail.html", {"plot": plot})
 
 
 def saved_plots_list(request):

@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "store.apps.StoreConfig",
+    "adverts.apps.AdvertsConfig",
     "crispy_forms",
 ]
 
@@ -82,8 +82,8 @@ WSGI_APPLICATION = "adverts_collector.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "store",
-        "USER": "store",
+        "NAME": "adverts",
+        "USER": "adverts",
         "PASSWORD": "password",
     }
 }

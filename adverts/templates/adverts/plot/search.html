@@ -8,7 +8,7 @@
         <div class="container">
             <div class="d-flex justify-content-center">
                 <div class="container">
-                    {% include "store/plot/search_form.html" with form=form %}
+                    {% include "adverts/plot/search_form.html" with form=form %}
                 </div>
             </div>
         </div>
@@ -16,7 +16,7 @@
     <div class="col-9">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
         {% if place %}
-            {% include "store/plot/plots.html" with plots=plots %}
+            {% include "adverts/plot/plots.html" with plots=plots %}
         {% else %}
             <div class="container pt-5">
               <p class="text-center">Wprowadź dane i kliknij szukaj, aby wyświetlić wyniki.</p>

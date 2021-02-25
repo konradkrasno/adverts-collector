@@ -4,12 +4,11 @@ import os
 from typing import *
 
 import pandas as pd
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
 from django.db import models, transaction
 from django.db.utils import ProgrammingError
 from django.urls import reverse
-from django.conf import settings
 
 
 class PlotManager(models.Manager):
@@ -60,6 +59,9 @@ class Plot(models.Model):
     image_url = models.CharField(max_length=500, null=True)
     objects = models.Manager()
     manager = PlotManager()
+    users_save = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="saved_plots", blank=True
+    )
 
     class Meta:
         ordering = ("price",)
@@ -68,7 +70,7 @@ class Plot(models.Model):
         return self.place
 
     def get_absolute_url(self):
-        return reverse("store:plot_detail", args=[self.id])
+        return reverse("adverts:plot_detail", args=[self.id])
 
     @classmethod
     def create_from_csv(cls, item: list) -> None:
@@ -140,12 +142,3 @@ class Plot(models.Model):
                 .order_by("place")
             )
         )
-
-
-class SavedAdverts(models.Model):
-    """ Creates relationships between the user and its saved adverts.  """
-
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="saved_adverts"
-    )
-    plots = models.ManyToManyField(Plot)

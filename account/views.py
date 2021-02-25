@@ -1,6 +1,8 @@
-from django.shortcuts import render, reverse
-from django.http import HttpResponseRedirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, reverse
+
 from .forms import UserRegistrationForm, UserEditForm
 
 
@@ -26,6 +28,9 @@ def edit(request):
         user_form = UserEditForm(instance=request.user, data=request.POST)
         if user_form.is_valid():
             user_form.save()
+            messages.success(request, "Profil został pomyślnie zmieniony")
+        else:
+            messages.error(request, "Wystąpił błąd podczas edycji profilu")
     else:
         user_form = UserEditForm(instance=request.user)
     return render(request, "account/edit.html", {"user_form": user_form})

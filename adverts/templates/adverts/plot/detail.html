@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load store_tags %}
+{% load adverts_tags %}
 
 {% block title %}Szczegóły{% endblock %}
 
@@ -14,7 +14,7 @@
 		  <div class="d-flex justify-content-between align-items-center">
 			<div class="btn-group">
 			  <button type="button" class="btn btn-sm btn-outline-secondary">
-				<a class="btn btn-sm" href="{% url 'store:plot_search' %}?{% query_transform %}">Powrót</a>
+				<a class="btn btn-sm" href="{% url 'adverts:plot_search' %}?{% query_transform %}">Powrót</a>
 			  </button>
 			  {% if user.is_authenticated %}
 			    <button type="button" class="btn btn-sm btn-outline-secondary">

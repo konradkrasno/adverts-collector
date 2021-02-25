@@ -1,5 +1,5 @@
 db.sqlite3
-store/migrations
+adverts/migrations
 account/migrations
 __pycache__
 */__pycache__

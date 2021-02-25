@@ -21,5 +21,5 @@ urlpatterns = [
     path("", dashboard, name="dashboard"),
     path("admin/", admin.site.urls),
     path("account/", include("account.urls")),
-    path("store/", include("store.urls", namespace="store")),
+    path("adverts/", include("adverts.urls", namespace="adverts")),
 ]

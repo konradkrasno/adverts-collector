@@ -49,7 +49,7 @@
         </li>
         {% if user.is_authenticated %}
         <li class="nav-item active">
-          <a class="nav-link" aria-current="page" href="#">Zapisane</a>
+          <a class="nav-link" aria-current="page" href="{% url 'adverts:saved_adverts' %}">Zapisane</a>
         </li>
         {% endif %}
       </ul>
@@ -84,7 +84,7 @@
     <p class="lead">Aplikacja zbierająca ogłoszenia z różnych serwisów w jedno miejsce</p>
   </div>
 
-  <div class="container">
+  <div class="container pb-5">
     {% if messages %}
         {% for message in messages %}
         <div class="alert alert-success" role="alert">{{ message|safe }}</div>

@@ -1,0 +1,69 @@
+version: '3.7'
+
+services:
+  redis:
+    hostname: redis
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  postgres:
+    hostname: postgres
+    image: postgres
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+
+  web:
+    hostname: adverts_collector
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - ".env"
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: ./boot.sh
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: worker
+    links:
+      - postgres
+      - redis
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: celery -A adverts_collector worker -l info
+
+  beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: beat
+    links:
+      - postgres
+      - redis
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: celery -A adverts_collector beat -l info

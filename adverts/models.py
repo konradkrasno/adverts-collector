@@ -16,11 +16,18 @@ class PlotManager(models.Manager):
         return super(PlotManager, self).get_queryset()
 
     def filter_plots(
-        self, place: str = None, price: int = None, area: int = None, query: str = None
+        self,
+        place: str = None,
+        price: int = None,
+        area: int = None,
+        query: str = None,
+        user=None,
     ) -> models.QuerySet:
         """ Returns objects filtered by place, maximum price and minimum area ordered by price. """
 
         plots = self.get_queryset()
+        if user:
+            plots = plots.filter(users_save=user)
         if place and place != "None":
             plots = plots.filter(place=place).order_by("price")
         if price and price != 0 and price != "None":
@@ -134,11 +141,9 @@ class Plot(models.Model):
         )
 
     @classmethod
-    def get_places(cls) -> Tuple:
+    def get_places(cls, objects: models.QuerySet = None) -> Tuple:
+        if objects is None:
+            objects = cls.objects.all()
         return tuple(
-            set(
-                cls.objects.only("place")
-                .values_list("place", flat=True)
-                .order_by("place")
-            )
+            set(objects.only("place").values_list("place", flat=True).order_by("place"))
         )

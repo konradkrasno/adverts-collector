@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Zapisane ogłoszenia{% endblock %}
+
+{% block content %}
+  <div class="row pt-3">
+    <div class="col">
+      <h5>Zapisane ogłoszenia:</h5>
+      <lu>
+        <li><a href="{% url 'adverts:saved_plots' %}">Działki budowlane</a></li>
+      </lu>
+
+    </div>
+    <div class="col-9">
+
+    </div>
+ </div>
+
+{% endblock %}

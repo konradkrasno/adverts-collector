@@ -1,9 +1,13 @@
 {% load crispy_forms_tags %}
 
 <h4 class="text-center">Wyszukaj:</h4>
-<form class="text-center" method="get" novalidate>
+<form method="get" novalidate>
     {{ form|crispy }}
+    <br>
     <div class="d-flex justify-content-center">
       <button type="submit" class="btn btn-success">Szukaj</button>
     </div>
+    <br>
+    <p class="text-center"><a href="{{ request.path }}">Usuń filtry</a></p>
+
 </form>

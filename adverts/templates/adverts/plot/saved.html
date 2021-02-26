@@ -14,15 +14,7 @@
         </div>
     </div>
     <div class="col-9">
-        {% if place %}
-            {% include "adverts/plot/plots.html" with plots=plots %}
-        {% else %}
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-            <div class="container pt-5">
-              <p class="text-center">Wprowadź dane i kliknij szukaj, aby wyświetlić wyniki.</p>
-            </div>
-        {% endif %}
-        </div>
+        {% include "adverts/plot/plots.html" with plots=plots %}
 
         {% if plots %}
         <div class="container pt-3">

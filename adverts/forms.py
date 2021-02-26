@@ -31,7 +31,13 @@ class SearchPlotForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         _data_list = kwargs.pop("data_list", None)
+        _place_not_required = kwargs.pop("place_not_required", None)
         super().__init__(*args, **kwargs)
+        if _place_not_required:
+            self.fields["place"].required = False
+            self.fields[
+                "place"
+            ].help_text = "Podaj lokalizację działki - pole opcjonalne"
         self.fields["place"].widget = ListTextWidget(
             data_list=_data_list, name="place-list"
         )

@@ -11,19 +11,25 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import logging
+import os
+from datetime import timedelta
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 logging.basicConfig(level=logging.DEBUG)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Load config variables
+load_dotenv(BASE_DIR.joinpath(".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "zwws#6(*z3wawj#rq8#%umdgm9n-0km69oq)^^*=v*ozcgdt6c"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -82,9 +88,11 @@ WSGI_APPLICATION = "adverts_collector.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "adverts",
-        "USER": "adverts",
-        "PASSWORD": "password",
+        "NAME": os.environ.get("DATABASE_NAME"),
+        "USER": os.environ.get("DATABASE_USER"),
+        "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
+        "HOST": os.environ.get("DATABASE_HOST"),
+        "PORT": "5432",
     }
 }
 
@@ -127,6 +135,16 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 
+# Celery Configuration Options
+CELERY_BROKER_URL = os.environ.get("REDIS_URL")
+CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL")
+CELERY_BEAT_SCHEDULE = {
+    "spider": {
+        "task": "adverts.uploads.run_spider",
+        "schedule": timedelta(days=7),
+    },
+}
+
 # Scrapy Configuration Options
 SCRAPED_DATA_CATALOG = BASE_DIR.joinpath("scraped_data")
 
@@ -135,6 +153,17 @@ LOGIN_REDIRECT_URL = "dashboard"
 LOGIN_URL = "login"
 LOGOUT_URL = "logout"
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
 AUTH_USER_MODEL = "account.User"
+
+
+# Email configuration
+EMAIL_USE_SSL = True
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_HOST_USER = os.environ.get("EMAIL_USERNAME")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+EMAIL_PORT = os.environ.get("EMAIL_PORT")
+DEFAULT_FROM_EMAIL = os.environ.get("EMAIL_USERNAME")
+
+
+# Crispy configuration
+CRISPY_TEMPLATE_PACK = "bootstrap4"

@@ -5,7 +5,7 @@ class ListTextWidget(forms.TextInput):
     def __init__(self, data_list, name, *args, **kwargs):
         super(ListTextWidget, self).__init__(*args, **kwargs)
         self._name = name
-        self._list = data_list
+        self._list = data_list if data_list else []
         self.attrs.update({"list": "list__%s" % self._name})
 
     def render(self, name, value, attrs=None, renderer=None):

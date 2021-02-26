@@ -6,3 +6,5 @@ __pycache__
 */*/__pycache__
 scraped_data
 todo.txt
+celerybeat-schedule
+.env

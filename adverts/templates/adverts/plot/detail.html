@@ -14,12 +14,20 @@
 		  <div class="d-flex justify-content-between align-items-center">
 			<div class="btn-group">
 			  <button type="button" class="btn btn-sm btn-outline-secondary">
-				<a class="btn btn-sm" href="{% url 'adverts:plot_search' %}?{% query_transform %}">Powrót</a>
+				  {% if request.GET.section == 'saved' %}
+  				    <a class="btn btn-sm" href="{% url 'adverts:saved_plots' %}?{% query_transform %}">Powrót</a>
+				  {% else %}
+  				    <a class="btn btn-sm" href="{% url 'adverts:plot_search' %}?{% query_transform %}">Powrót</a>
+				  {% endif %}
 			  </button>
 			  {% if user.is_authenticated %}
-			    <button type="button" class="btn btn-sm btn-outline-secondary">
-				   <a class="btn btn-sm" href="#">Zapisz</a>
-			    </button>
+				  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="saveScrollPos()">
+					{% if plot in user.saved_plots.all %}
+					  <a class="btn btn-sm" href="{% url 'adverts:delete_advert' advert_type='plot' advert_id=plot.id %}">Usuń</a>
+					{% else %}
+					  <a class="btn btn-sm" href="{% url 'adverts:save_advert' advert_type='plot' advert_id=plot.id %}">Zapisz</a>
+					{% endif %}
+				  </button>
 			  {% endif %}
         </div>
 		  </div><br>
@@ -46,5 +54,4 @@
 	  </div>
 	</div>
 </main>
-
 {% endblock %}

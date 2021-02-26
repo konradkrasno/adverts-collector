@@ -1,6 +1,7 @@
 #!/bin/bash
 while true; do
-    python3 manage.py makemigrations parcels
+    python3 manage.py makemigrations account
+    python3 manage.py makemigrations adverts
     python3 manage.py migrate
     if [[ "$?" == "0" ]]; then
         break

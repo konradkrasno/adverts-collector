@@ -1,4 +1,5 @@
 from django import template
+from ..models import Plot
 
 register = template.Library()
 
@@ -20,3 +21,23 @@ def query_transform(context, **kwargs):
     for k, v in kwargs.items():
         query[k] = v
     return query.urlencode()
+
+
+@register.inclusion_tag("adverts/plot/list.html")
+def show_last_added_plots(count: int = 3):
+    plots = Plot.objects.all().order_by("-created")[:count]
+    return {"plots": plots}
+
+
+@register.inclusion_tag("adverts/plot/list.html")
+def show_last_seen_plots(count: int = 3):
+    # TODO finish
+    plots = []
+    return {"plots": plots}
+
+
+@register.inclusion_tag("adverts/plot/list.html")
+def show_recommended_plots(count: int = 3):
+    # TODO finish
+    plots = []
+    return {"plots": plots}

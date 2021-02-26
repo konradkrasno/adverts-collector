@@ -69,6 +69,7 @@ class Plot(models.Model):
     users_save = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name="saved_plots", blank=True
     )
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ("price",)

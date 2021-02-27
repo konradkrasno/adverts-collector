@@ -1,6 +1,7 @@
 db.sqlite3
 adverts/migrations
 account/migrations
+errors/migrations
 __pycache__
 */__pycache__
 */*/__pycache__

@@ -17,6 +17,9 @@ from account.views import dashboard
 from django.contrib import admin
 from django.urls import path, include
 
+handler404 = "errors.views.error_404"
+handler500 = "errors.views.error_500"
+
 urlpatterns = [
     path("", dashboard, name="dashboard"),
     path("admin/", admin.site.urls),

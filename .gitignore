@@ -9,3 +9,6 @@ scraped_data
 todo.txt
 celerybeat-schedule
 .env
+.coverage
+htmlcov
+coverage.svg

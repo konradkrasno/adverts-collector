@@ -40,15 +40,19 @@ class TestViews:
         )
         assert len(response.context.get("plots").object_list) == 1
 
-    def test_saved_plots_list(self, user, client, save_plots):
-        response = client.get(reverse("adverts:saved_plots"))
+    def test_plot_detail(self, client):
+        plot = Plot.objects.first()
+        response = client.get(reverse("adverts:plot_detail", kwargs={"plot_id": plot.id}))
         assert response.status_code == 200
+        assert response.context.get("plot") == Plot.objects.get(id=plot.id)
+
+    def test_saved_plots_list(self, user, client, save_plots):
         kwargs = {
             "place": "Dębe Wielkie",
             "price": 400000,
             "area": 800,
         }
-        response = client.get(reverse("adverts:plot_search"), data=kwargs)
+        response = client.get(reverse("adverts:saved_plots"), data=kwargs)
         assert response.status_code == 200
         assert (
             response.request.get("QUERY_STRING")

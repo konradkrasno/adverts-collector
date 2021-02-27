@@ -41,7 +41,7 @@ class TestPlot:
             == "Rysie"
         )
 
-    def search_by_description(self):
+    def test_search_by_description(self):
         adverts = Plot.objects.all()
         assert Plot.manager.search_by_description(adverts, "media przy działce")
 

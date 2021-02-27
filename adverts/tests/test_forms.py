@@ -19,3 +19,5 @@ class TestForms:
     def test_advert_form_when_invalid(self):
         form = SearchPlotForm({})
         assert not form.is_valid()
+        form = SearchPlotForm({"place": "Warszawa", "price": -100})
+        assert not form.is_valid()

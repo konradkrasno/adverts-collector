@@ -11,4 +11,3 @@ celerybeat-schedule
 .env
 .coverage
 htmlcov
-coverage.svg

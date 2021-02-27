@@ -6,11 +6,11 @@
       {% if user.is_authenticated %}
         {% if section != 'saved' %}
         <button type="button" class="btn btn-sm btn-outline-secondary">
-          <a class="btn btn-sm" href="{% url 'adverts:save_all_adverts' advert_type='plot' %}?{% query_transform %}">Zapisz wszystkie</a>
+          <a class="btn btn-sm" href="{% url 'adverts:save_all_adverts' advert_type='plot' %}?{% query_transform %}">Zapisz wyfiltrowane</a>
         </button>
         {% endif %}
         <button type="button" class="btn btn-sm btn-outline-secondary">
-          <a class="btn btn-sm" href="{% url 'adverts:delete_all_adverts' advert_type='plot' section=section %}?{% query_transform %}">Usuń wszystkie</a>
+          <a class="btn btn-sm" href="{% url 'adverts:delete_all_adverts' advert_type='plot' section=section %}?{% query_transform %}">Usuń wyfiltrowane</a>
         </button>
         <button type="button" class="btn btn-sm btn-outline-secondary">
           <a class="btn btn-sm" href="{% url 'adverts:download_csv' advert_type='plot' section=section %}?{% query_transform %}">Pobierz jako plik csv</a>
@@ -60,7 +60,7 @@
   </div>
   {% empty %}
     <div class="container pt-5">
-        <p class="text-center">Brak wyników wyszukiwania. Spróbuj wprowadzić inne dane.</p>
+        <p class="text-center">Brak wyników do wyświetlenia.</p>
     </div>
   {% endfor %}
 </div>

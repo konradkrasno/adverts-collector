@@ -1,0 +1,123 @@
+import pytest
+from django.contrib.auth.models import AnonymousUser
+from django.shortcuts import reverse
+
+from adverts import tasks
+from adverts import uploads
+from adverts import views
+from adverts.models import Plot
+
+
+@pytest.mark.django_db
+class TestViews:
+    """ Class for testing Django Views. """
+
+    pytestmark = pytest.mark.django_db
+
+    def test_run_spider(self, client, mocker):
+        mocker.patch("adverts.uploads.run_spider.delay")
+        response = client.get(reverse("adverts:crawl_data"))
+        assert response.status_code == 200
+        uploads.run_spider.delay.assert_called_once()
+
+    def test_upload_data(self, client, mocker):
+        mocker.patch("adverts.uploads.upload_plots.delay")
+        response = client.get(reverse("adverts:upload_data"))
+        assert response.status_code == 200
+        uploads.upload_plots.delay.assert_called_once()
+
+    def test_plot_search(self, client):
+        kwargs = {
+            "place": "Dębe Wielkie",
+            "price": 400000,
+            "area": 800,
+        }
+        response = client.get(reverse("adverts:plot_search"), data=kwargs)
+        assert response.status_code == 200
+        assert (
+            response.request.get("QUERY_STRING")
+            == "place=D%C4%99be+Wielkie&price=400000&area=800"
+        )
+        assert len(response.context.get("plots").object_list) == 1
+
+    def test_saved_plots_list(self, user, client, save_plots):
+        response = client.get(reverse("adverts:saved_plots"))
+        assert response.status_code == 200
+        kwargs = {
+            "place": "Dębe Wielkie",
+            "price": 400000,
+            "area": 800,
+        }
+        response = client.get(reverse("adverts:plot_search"), data=kwargs)
+        assert response.status_code == 200
+        assert (
+            response.request.get("QUERY_STRING")
+            == "place=D%C4%99be+Wielkie&price=400000&area=800"
+        )
+        assert len(response.context.get("plots").object_list) == 1
+
+    def test_save_advert(self, user, client):
+        plot_id = Plot.objects.get(place="Dębe Wielkie").id
+        response = client.post(
+            reverse(
+                "adverts:save_advert",
+                kwargs={"advert_type": "plot", "advert_id": plot_id},
+            ),
+            HTTP_REFERER="http://foo/bar",
+        )
+        assert response.status_code == 302
+        assert user.saved_plots.filter(place="Dębe Wielkie").all()
+
+    def test_delete_advert(self, user, client, save_plots):
+        plot_id = Plot.objects.get(place="Dębe Wielkie").id
+        response = client.post(
+            reverse(
+                "adverts:delete_advert",
+                kwargs={"advert_type": "plot", "advert_id": plot_id},
+            ),
+            HTTP_REFERER="http://foo/bar",
+        )
+        assert response.status_code == 302
+        assert not user.saved_plots.filter(place="Dębe Wielkie").all()
+
+    def test_save_all_adverts(self, user, client):
+        response = client.post(
+            reverse("adverts:save_all_adverts", kwargs={"advert_type": "plot"}),
+            HTTP_REFERER="http://foo/bar",
+        )
+        assert response.status_code == 302
+        assert len(user.saved_plots.all()) == 3
+
+    def test_delete_all_adverts(self, user, client, save_plots):
+        response = client.post(
+            reverse(
+                "adverts:delete_all_adverts",
+                kwargs={"advert_type": "plot", "section": None},
+            ),
+            HTTP_REFERER="http://foo/bar",
+        )
+        assert response.status_code == 302
+        assert list(user.saved_plots.all()) == []
+
+    def test_download_csv(self, client, save_plots):
+        response = client.post(
+            reverse(
+                "adverts:download_csv", kwargs={"advert_type": "plot", "section": None}
+            )
+        )
+        assert response.status_code == 200
+        assert (
+            response.get("Content-Disposition")
+            == '''attachment; filename="your_adverts.csv"'''
+        )
+
+    def test_send_csv(self, user, client, save_plots, mocker):
+        mocker.patch("adverts.tasks.send_email.delay")
+        response = client.post(
+            reverse(
+                "adverts:send_csv", kwargs={"advert_type": "plot", "section": None}
+            ),
+            HTTP_REFERER="http://foo/bar",
+        )
+        assert response.status_code == 302
+        tasks.send_email.delay.assert_called_once()

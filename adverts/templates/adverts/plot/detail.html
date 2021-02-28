@@ -16,8 +16,7 @@
 			  <button type="button" class="btn btn-sm btn-outline-secondary">
 				  {% if request.GET.section == 'saved' %}
   				    <a class="btn btn-sm" href="{% url 'adverts:saved_plots' %}?{% query_transform %}">Powrót</a>
-				  {% endif %}
-				  {% if request.GET.section == 'search' %}
+				  {% elif request.GET.section == 'search' %}
   				    <a class="btn btn-sm" href="{% url 'adverts:plot_search' %}?{% query_transform %}">Powrót</a>
 				  {% else %}
   				    <a class="btn btn-sm" href="{% url 'dashboard' %}">Powrót</a>

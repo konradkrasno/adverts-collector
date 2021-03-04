@@ -26,41 +26,48 @@
 </div>
 
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-  {% for plot in plots %}
-  <div class="col">
-    <div class="card shadow-sm">
-      <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><image href="{{ plot.image_url }}" height="100%" width="100%"/></svg>
+  {% with user_saved_plots=request.user.saved_plots.all %}
+    {% for plot in plots %}
+    <div class="col">
+      <div class="card shadow-sm">
+        <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><image href="{{ plot.image_url }}" height="100%" width="100%"/></svg>
 
-      <div class="card-body">
-        <h5  class="card-text">{{ plot.place }}</h5>
-        <h6  class="card-text">{% if plot.county != 'brak danych' %}powiat {{ plot.county }}{% endif %}</h6>
-        <h6  class="card-text">{{ plot.price }} PLN</h6>
-        <h6  class="card-text">{{ plot.area }} m2</h6>
-        <h6  class="card-text">{{ plot.price_per_m2 }} PLN/m2</h6>
-        <p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">{{ plot.description }}</p>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="btn-group btn-group-sm">
-            <button type="button" class="btn btn-sm btn-outline-secondary">
-              <a class="btn btn-sm" href="{{ plot.get_absolute_url }}?{% query_transform section=section %}">Wyświetl</a>
-            </button>
-            {% if user.is_authenticated %}
-                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="saveScrollPos()">
-                  {% if plot in user.saved_plots.all %}
-                    <a class="btn btn-sm" href="{% url 'adverts:delete_advert' advert_type='plot' advert_id=plot.id %}">Usuń</a>
-                  {% else %}
-                    <a class="btn btn-sm" href="{% url 'adverts:save_advert' advert_type='plot' advert_id=plot.id %}">Zapisz</a>
-                  {% endif %}
-                </button>
-            {% endif %}
+        <div class="card-body">
+          <h5  class="card-text">{{ plot.place }}</h5>
+          <h6  class="card-text">{% if plot.county != 'brak danych' %}powiat {{ plot.county }}{% endif %}</h6>
+          <h6  class="card-text">{{ plot.price }} PLN</h6>
+          <h6  class="card-text">{{ plot.area }} m2</h6>
+          <h6  class="card-text">{{ plot.price_per_m2 }} PLN/m2</h6>
+          <p class="card-text" style="display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;">{{ plot.description }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group btn-group-sm">
+              <button type="button" class="btn btn-sm btn-outline-secondary">
+                <a class="btn btn-sm" href="{{ plot.get_absolute_url }}?{% query_transform section=section %}">Wyświetl</a>
+              </button>
+
+              {% if request.user.is_authenticated %}
+              <button type="button" class="btn btn-sm btn-outline-secondary">
+                  <a href="#" data-id="{{ plot.id }}" data-type="plot" data-action="{% if plot in user_saved_plots %}remove{% else %}save{% endif %}"
+                  class="save button" id="{{ plot.id }}">
+                    {% if plot not in user_saved_plots %}
+                      Zapisz
+                    {% else %}
+                      Usuń
+                    {% endif %}
+                  </a>
+              </button>
+              {% endif %}
+              
+            </div>
+            <small class="text-muted">{{ plot.date_added }}</small>
           </div>
-          <small class="text-muted">{{ plot.date_added }}</small>
         </div>
       </div>
     </div>
-  </div>
-  {% empty %}
-    <div class="container pt-5">
-        <p class="text-center">Brak wyników do wyświetlenia.</p>
-    </div>
-  {% endfor %}
+    {% empty %}
+      <div class="container pt-5">
+          <p class="text-center">Brak wyników do wyświetlenia.</p>
+      </div>
+    {% endfor %}
+  {% endwith %}
 </div>

@@ -36,3 +36,29 @@
  </div>
 
 {% endblock %}
+
+{% block domready %}
+  $('a.save').click(function(e){
+    e.preventDefault();
+    advert_id = $(this).data('id');
+    $.post('{% url "adverts:save" %}',
+      {
+        id: $(this).data('id'),
+        type: $(this).data('type'),
+        action: $(this).data('action')
+      },
+      function(data){
+        if (data['status'] == 'ok')
+        {
+          var previous_action = $('[id=' + advert_id + ']').data('action');
+
+          // toggle data-action
+          $('[id=' + advert_id + ']').data('action', previous_action == 'save' ? 'remove' : 'save');
+
+          // toggle link text
+          $('[id=' + advert_id + ']').text(previous_action == 'save' ? 'Usuń' : 'Zapisz');
+        }
+      }
+    );
+  });
+{% endblock %}

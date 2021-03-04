@@ -22,16 +22,23 @@
   				    <a class="btn btn-sm" href="{% url 'dashboard' %}">Powrót</a>
 				  {% endif %}
 			  </button>
-			  {% if user.is_authenticated %}
-				  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="saveScrollPos()">
-					{% if plot in user.saved_plots.all %}
-					  <a class="btn btn-sm" href="{% url 'adverts:delete_advert' advert_type='plot' advert_id=plot.id %}">Usuń</a>
+
+			  {% if request.user.is_authenticated %}
+			  <button type="button" class="btn btn-sm btn-outline-secondary">
+				{% with user_saved_plots=request.user.saved_plots.all %}
+				  <a href="#" data-id="{{ plot.id }}" data-type="plot" data-action="{% if request.user in user_saved_plots %}remove{% else %}save{% endif %}"
+				  class="save button" id="{{ plot.id }}">
+					{% if request.user not in user_saved_plots %}
+					  Zapisz
 					{% else %}
-					  <a class="btn btn-sm" href="{% url 'adverts:save_advert' advert_type='plot' advert_id=plot.id %}">Zapisz</a>
+					  Usuń
 					{% endif %}
-				  </button>
+				  </a>
+				{% endwith %}
+			  </button>
 			  {% endif %}
-        </div>
+  
+			</div>
 		  </div><br>
 			<h4  class="card-text">{{ plot.place }}</h4>
 			<h5  class="card-text">{% if plot.county != 'brak danych' %}powiat {{ plot.county }}{% endif %}</h5>
@@ -56,4 +63,30 @@
 	  </div>
 	</div>
 </main>
+{% endblock %}
+
+{% block domready %}
+  $('a.save').click(function(e){
+    e.preventDefault();
+    advert_id = $(this).data('id');
+    $.post('{% url "adverts:save" %}',
+      {
+        id: $(this).data('id'),
+        type: $(this).data('type'),
+        action: $(this).data('action')
+      },
+      function(data){
+        if (data['status'] == 'ok')
+        {
+          var previous_action = $('[id=' + advert_id + ']').data('action');
+
+          // toggle data-action
+          $('[id=' + advert_id + ']').data('action', previous_action == 'save' ? 'remove' : 'save');
+
+          // toggle link text
+          $('[id=' + advert_id + ']').text(previous_action == 'save' ? 'Usuń' : 'Zapisz');
+        }
+      }
+    );
+  });
 {% endblock %}

@@ -1,6 +1,7 @@
 import csv
 from io import StringIO
 
+from common.decorators import ajax_required
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, StreamingHttpResponse
@@ -106,6 +107,7 @@ def saved_plots_list(request):
     )
 
 
+@ajax_required
 @login_required
 @require_POST
 def advert_save(request):

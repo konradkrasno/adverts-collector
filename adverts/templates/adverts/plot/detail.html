@@ -25,16 +25,7 @@
 			  </button>
 
               {% if request.user.is_authenticated %}
-              <button type="button" class="btn btn-sm btn-outline-secondary">
-                  <a href="#" data-id="{{ plot.id }}" data-type="plot" data-action="{% if plot in user_saved_plots %}remove{% else %}save{% endif %}"
-                  class="save button" id="{{ plot.id }}">
-                    {% if plot not in user_saved_plots %}
-                      Zapisz
-                    {% else %}
-                      Usuń
-                    {% endif %}
-                  </a>
-              </button>
+			    {% include "adverts/adverts/advert_save_button.html" with advert_type='plot' user_saved_adverts=user_saved_plots advert=plot %}
               {% endif %}
   
 			</div>

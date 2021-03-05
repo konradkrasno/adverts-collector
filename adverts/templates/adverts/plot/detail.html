@@ -6,6 +6,7 @@
 {% block content %}
 
 <main>
+  {% with user_saved_plots=request.user.saved_plots.all %}
 	<div class="col">
 	  <div class="card shadow-sm">
 		<svg class="bd-placeholder-img card-img-top" width="200%" height="450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="200%" height="200%" fill="#55595c"/><image href="{{ plot.image_url }}" height="100%" width="100%"/></svg>
@@ -23,20 +24,18 @@
 				  {% endif %}
 			  </button>
 
-			  {% if request.user.is_authenticated %}
-			  <button type="button" class="btn btn-sm btn-outline-secondary">
-				{% with user_saved_plots=request.user.saved_plots.all %}
-				  <a href="#" data-id="{{ plot.id }}" data-type="plot" data-action="{% if request.user in user_saved_plots %}remove{% else %}save{% endif %}"
-				  class="save button" id="{{ plot.id }}">
-					{% if request.user not in user_saved_plots %}
-					  Zapisz
-					{% else %}
-					  Usuń
-					{% endif %}
-				  </a>
-				{% endwith %}
-			  </button>
-			  {% endif %}
+              {% if request.user.is_authenticated %}
+              <button type="button" class="btn btn-sm btn-outline-secondary">
+                  <a href="#" data-id="{{ plot.id }}" data-type="plot" data-action="{% if plot in user_saved_plots %}remove{% else %}save{% endif %}"
+                  class="save button" id="{{ plot.id }}">
+                    {% if plot not in user_saved_plots %}
+                      Zapisz
+                    {% else %}
+                      Usuń
+                    {% endif %}
+                  </a>
+              </button>
+              {% endif %}
   
 			</div>
 		  </div><br>
@@ -62,6 +61,7 @@
 		</div>
 	  </div>
 	</div>
+  {% endwith %}
 </main>
 {% endblock %}
 

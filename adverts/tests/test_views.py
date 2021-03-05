@@ -59,30 +59,27 @@ class TestViews:
             == "place=D%C4%99be+Wielkie&price=400000&area=800"
         )
         assert len(response.context.get("plots").object_list) == 1
+    
+    def test_advert_save_when_bad_request(self, user, client):
+        response = client.post(reverse("adverts:save"))
+        assert response.status_code == 400
 
-    def test_save_advert(self, user, client):
-        plot_id = Plot.objects.get(place="Dębe Wielkie").id
-        response = client.post(
-            reverse(
-                "adverts:save_advert",
-                kwargs={"advert_type": "plot", "advert_id": plot_id},
-            ),
-            HTTP_REFERER="http://foo/bar",
-        )
-        assert response.status_code == 302
-        assert user.saved_plots.filter(place="Dębe Wielkie").all()
+    def test_advert_save_when_advert_not_exists(self, user, client):
+        response = client.post(reverse("adverts:save"), {"id": '1000', "type": "plot", "action": "save"}, **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
+        assert response.status_code == 200
+        assert not user.saved_plots.all()
+    
+    def test_advert_save_when_save(self, user, client):
+        plot = Plot.objects.first()
+        response = client.post(reverse("adverts:save"), {"id": plot.id, "type": "plot", "action": "save"}, **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
+        assert response.status_code == 200
+        assert user.saved_plots.first() == plot
 
-    def test_delete_advert(self, user, client, save_plots):
-        plot_id = Plot.objects.get(place="Dębe Wielkie").id
-        response = client.post(
-            reverse(
-                "adverts:delete_advert",
-                kwargs={"advert_type": "plot", "advert_id": plot_id},
-            ),
-            HTTP_REFERER="http://foo/bar",
-        )
-        assert response.status_code == 302
-        assert not user.saved_plots.filter(place="Dębe Wielkie").all()
+    def test_advert_save_when_delete(self, user, client, save_plots):
+        plot = user.saved_plots.first()
+        response = client.post(reverse("adverts:save"), {"id": plot.id, "type": "plot", "action": "remove"}, **{'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest'})
+        assert response.status_code == 200
+        assert plot not in user.saved_plots.all()
 
     def test_save_all_adverts(self, user, client):
         response = client.post(

@@ -1,0 +1,10 @@
+<button type="button" class="btn btn-sm btn-outline-secondary">
+    <a href="#" data-id="{{ advert.id }}" data-type="{{ advert_type }}" data-action="{% if advert in user_saved_adverts %}remove{% else %}save{% endif %}"
+    class="save button" id="{{ advert.id }}">
+      {% if advert not in user_saved_adverts %}
+        Zapisz
+      {% else %}
+        Usuń
+      {% endif %}
+    </a>
+</button>

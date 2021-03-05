@@ -45,6 +45,7 @@ adverts_collector/.env
     DATABASE_PASSWORD=<datababase-password>
     DATABASE_HOST=<datababase-host>
     REDIS_URL=<redis-url>
+    DEBUG=1
 }
 ```
 

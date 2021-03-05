@@ -1,16 +1,16 @@
 import csv
 from io import StringIO
 
+from common.decorators import ajax_required
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.http import StreamingHttpResponse
-from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.http import JsonResponse, StreamingHttpResponse
+from django.shortcuts import get_object_or_404, redirect, render, reverse
+from django.views.decorators.http import require_POST
 
-from . import tasks
-from . import uploads
+from . import tasks, uploads
 from .forms import SearchPlotForm
-from .helpers import get_adverts, Echo, prepare_plot_to_csv
+from .helpers import Echo, get_adverts, prepare_plot_to_csv
 from .models import Plot
 from .pagination import paginate
 
@@ -107,24 +107,27 @@ def saved_plots_list(request):
     )
 
 
+@ajax_required
 @login_required
-def save_advert(request, advert_type: str, advert_id: int):
-    if advert_type == "plot":
-        plot = get_object_or_404(Plot, id=advert_id)
-        request.user.saved_plots.add(plot)
-        request.user.save()
-        messages.success(request, "Pomyślnie zapisano ogłoszenie.")
-    return redirect(request.META["HTTP_REFERER"])
-
-
-@login_required
-def delete_advert(request, advert_type: str, advert_id: int):
-    if advert_type == "plot":
-        plot = get_object_or_404(Plot, id=advert_id)
-        request.user.saved_plots.remove(plot)
-        request.user.save()
-        messages.success(request, "Pomyślnie usunięto ogłoszenie.")
-    return redirect(request.META["HTTP_REFERER"])
+@require_POST
+def advert_save(request):
+    advert_type = request.POST.get("type")
+    advert_id = request.POST.get("id")
+    action = request.POST.get("action")
+    if advert_id and action:
+        if advert_type == "plot":
+            try:
+                plot = Plot.objects.get(id=advert_id)
+            except Plot.DoesNotExist:
+                pass
+            else:
+                if action == "save":
+                    request.user.saved_plots.add(plot)
+                else:
+                    request.user.saved_plots.remove(plot)
+                request.user.save()
+                return JsonResponse({"status": "ok"})
+    return JsonResponse({"status": "error"})
 
 
 @login_required

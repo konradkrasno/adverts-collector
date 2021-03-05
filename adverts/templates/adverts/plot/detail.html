@@ -6,6 +6,7 @@
 {% block content %}
 
 <main>
+  {% with user_saved_plots=request.user.saved_plots.all %}
 	<div class="col">
 	  <div class="card shadow-sm">
 		<svg class="bd-placeholder-img card-img-top" width="200%" height="450" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="200%" height="200%" fill="#55595c"/><image href="{{ plot.image_url }}" height="100%" width="100%"/></svg>
@@ -22,16 +23,12 @@
   				    <a class="btn btn-sm" href="{% url 'dashboard' %}">Powrót</a>
 				  {% endif %}
 			  </button>
-			  {% if user.is_authenticated %}
-				  <button type="button" class="btn btn-sm btn-outline-secondary" onclick="saveScrollPos()">
-					{% if plot in user.saved_plots.all %}
-					  <a class="btn btn-sm" href="{% url 'adverts:delete_advert' advert_type='plot' advert_id=plot.id %}">Usuń</a>
-					{% else %}
-					  <a class="btn btn-sm" href="{% url 'adverts:save_advert' advert_type='plot' advert_id=plot.id %}">Zapisz</a>
-					{% endif %}
-				  </button>
-			  {% endif %}
-        </div>
+
+              {% if request.user.is_authenticated %}
+			    {% include "adverts/adverts/advert_save_button.html" with advert_type='plot' user_saved_adverts=user_saved_plots advert=plot %}
+              {% endif %}
+  
+			</div>
 		  </div><br>
 			<h4  class="card-text">{{ plot.place }}</h4>
 			<h5  class="card-text">{% if plot.county != 'brak danych' %}powiat {{ plot.county }}{% endif %}</h5>
@@ -55,5 +52,32 @@
 		</div>
 	  </div>
 	</div>
+  {% endwith %}
 </main>
+{% endblock %}
+
+{% block domready %}
+  $('a.save').click(function(e){
+    e.preventDefault();
+    advert_id = $(this).data('id');
+    $.post('{% url "adverts:save" %}',
+      {
+        id: $(this).data('id'),
+        type: $(this).data('type'),
+        action: $(this).data('action')
+      },
+      function(data){
+        if (data['status'] == 'ok')
+        {
+          var previous_action = $('[id=' + advert_id + ']').data('action');
+
+          // toggle data-action
+          $('[id=' + advert_id + ']').data('action', previous_action == 'save' ? 'remove' : 'save');
+
+          // toggle link text
+          $('[id=' + advert_id + ']').text(previous_action == 'save' ? 'Usuń' : 'Zapisz');
+        }
+      }
+    );
+  });
 {% endblock %}

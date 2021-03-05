@@ -12,12 +12,7 @@ urlpatterns = [
     path("saved/", views.saved_adverts, name="saved_adverts"),
     path("saved/plots/", views.saved_plots_list, name="saved_plots"),
     path(
-        "save/<str:advert_type>/<int:advert_id>/", views.save_advert, name="save_advert"
-    ),
-    path(
-        "delete/<str:advert_type>/<int:advert_id>/",
-        views.delete_advert,
-        name="delete_advert",
+        "save/", views.advert_save, name="save"
     ),
     path(
         "save_all/<str:advert_type>/", views.save_all_adverts, name="save_all_adverts"

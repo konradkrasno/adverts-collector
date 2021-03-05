@@ -28,3 +28,24 @@
  </div>
 
 {% endblock %}
+
+{% block domready %}
+  $('a.save').click(function(e){
+    e.preventDefault();
+    advert_id = $(this).data('id');
+    $.post('{% url "adverts:save" %}',
+      {
+        id: $(this).data('id'),
+        type: $(this).data('type'),
+        action: $(this).data('action')
+      },
+      function(data){
+        if (data['status'] == 'ok')
+        {
+          // delete card from list
+          $('[id=' + advert_id + ']').parent().parent().parent().parent().parent().remove();
+        }
+      }
+    );
+  });
+{% endblock %}

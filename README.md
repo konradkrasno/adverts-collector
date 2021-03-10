@@ -1,4 +1,4 @@
-# parcels-web-app
+# adverts-collector
 ![Alt text](./coverage.svg)
 
 This is django web application with which you can look for advertisements and find the most attractive one.
